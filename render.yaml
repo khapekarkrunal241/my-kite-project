@@ -5,8 +5,8 @@ services:
     plan: free
     branch: main
     envVars:
-      - key: base64:3r1sXEnUgADozxjeFTHv16/c+xTwIFO4nvEny86hUSA=
-        value: YOUR_APP_KEY_HERE
+      - key: APP_KEY
+        value: base64:3r1sXEnUgADozxjeFTHv16/c+xTwIFO4nvEny86hUSA=
       - key: APP_ENV
         value: production
       - key: APP_DEBUG

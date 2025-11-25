@@ -1,33 +1,34 @@
-# Use official PHP image with extensions
+# Use official PHP 8.2 image with FPM
 FROM php:8.2-fpm
 
-# Install system dependencies
+# Install required system dependencies
 RUN apt-get update && apt-get install -y \
+    nginx \
     git \
-    curl \
     zip \
     unzip \
-    nginx \
     libpq-dev \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql
-
-# Install Composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+    && docker-php-ext-install pdo pdo_pgsql
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy project to container
+# Copy project files
 COPY . .
 
-# Install dependencies
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Laravel permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Set permissions
+RUN chmod -R 777 storage bootstrap/cache
+
+# Copy nginx config
+COPY docker/nginx.conf /etc/nginx/sites-enabled/default
 
 # Expose port 80
 EXPOSE 80
 
-# Start nginx and php-fpm
 CMD service nginx start && php-fpm
