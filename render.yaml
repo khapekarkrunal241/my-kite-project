@@ -1,20 +1,16 @@
 services:
   - type: web
-    name: kite-shop-krk
+    name: kites-laravel
     env: docker
-    region: singapore
     plan: free
-    disk:
-      name: storage
-      mountPath: /app/storage
-      sizeGB: 1
+    branch: main
     envVars:
+      - key: base64:3r1sXEnUgADozxjeFTHv16/c+xTwIFO4nvEny86hUSA=
+        value: YOUR_APP_KEY_HERE
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: false
-      - key: APP_URL
-        value: https://kite-shop-krk.onrender.com
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
